@@ -1,0 +1,29 @@
+name: flankr_shimmer
+description: >-
+  Smart skeleton loading for Flutter. Wrap what you'd render once data arrives;
+  a shimmering skeleton is measured from it, then content is revealed in place.
+version: 0.1.0
+repository: https://github.com/amansharma312/flankr-shimmer
+issue_tracker: https://github.com/amansharma312/flankr-shimmer/issues
+
+topics:
+  - skeleton
+  - shimmer
+  - loading
+  - placeholder
+  - animation
+
+environment:
+  sdk: ">=3.6.0 <4.0.0"
+  flutter: ">=3.27.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+flutter:
