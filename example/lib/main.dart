@@ -14,8 +14,11 @@ class Order {
   static const sample = Order('Sample store name', '3 items · Sample summary', '₹000', 'Delivered');
 }
 
+/// How long the fake fetch takes; `--dart-define=DEMO_DELAY_MS=6000` to linger.
+const int demoDelayMs = int.fromEnvironment('DEMO_DELAY_MS', defaultValue: 2000);
+
 Future<List<Order>> fetchOrders() => Future.delayed(
-      const Duration(seconds: 2),
+      const Duration(milliseconds: demoDelayMs),
       () => const [
         Order('Easy Spin Laundry', 'Wash & fold · 4 kg', '₹349', 'Out for delivery'),
         Order('Fresh Press', 'Dry clean · 2 shirts', '₹180', 'Delivered'),

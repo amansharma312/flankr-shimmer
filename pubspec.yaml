@@ -6,6 +6,18 @@ version: 0.1.0
 repository: https://github.com/amansharma312/flankr-shimmer
 issue_tracker: https://github.com/amansharma312/flankr-shimmer/issues
 
+screenshots:
+  - description: A list of cards loading, its skeleton measured from the real widgets.
+    path: screenshots/light-loading.png
+  - description: The same list once loaded; nothing moves when content arrives.
+    path: screenshots/light-loaded.png
+  - description: The top-to-bottom reveal, slowed down.
+    path: screenshots/reveal.gif
+  - description: Dark mode, with one shimmer band shared across every skeleton.
+    path: screenshots/dark-loading.png
+  - description: Dark mode, loaded.
+    path: screenshots/dark-loaded.png
+
 topics:
   - skeleton
   - shimmer

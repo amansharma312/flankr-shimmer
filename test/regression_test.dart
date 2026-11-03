@@ -132,4 +132,11 @@ void main() {
     await tester.pumpWidget(app(const Center(child: IntrinsicHeight(child: FlankrBones(replay: shape)))));
     expect(tester.getSize(find.byType(FlankrBones)).height, 48);
   });
+
+  testWidgets('SkeletonBox.fraction draws only its fraction', (tester) async {
+    await tester.pumpWidget(app(const Column(children: [SkeletonBox.fraction(widthFactor: 0.6)])));
+    final parent = tester.getSize(find.byType(Scaffold)).width;
+    final m = measureBones(tester.renderObject<RenderBox>(find.byType(FractionallySizedBox)), style);
+    expect(m.shape.bones.single.rect.width, closeTo(parent * 0.6, 0.5));
+  });
 }

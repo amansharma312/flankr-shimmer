@@ -29,14 +29,14 @@ class SkeletonBox extends StatelessWidget {
   Widget build(BuildContext context) {
     final h = height ?? DefaultTextStyle.of(context).style.fontSize ?? 14;
     final factor = widthFactor;
-    final Widget box = factor == null
-        ? SizedBox(width: width ?? double.infinity, height: h)
-        : FractionallySizedBox(
-            widthFactor: factor,
-            alignment: AlignmentDirectional.centerStart,
-            child: SizedBox(height: h),
-          );
-    final block = FlankrBlock(radius: radius, child: box);
+    // The block wraps only the bar itself, so a fraction stays a fraction.
+    final bar = FlankrBlock(
+      radius: radius,
+      child: SizedBox(width: factor == null ? (width ?? double.infinity) : null, height: h),
+    );
+    final block = factor == null
+        ? bar
+        : FractionallySizedBox(widthFactor: factor, alignment: AlignmentDirectional.centerStart, child: bar);
     return FlankrLoading.of(context) ? block : FlankrBones(child: block);
   }
 }

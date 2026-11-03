@@ -8,6 +8,13 @@ every line of text, a block for every image, icon and control. Cards and
 sheets keep their own surface. The skeleton takes exactly the space the
 content will, so nothing moves when it arrives.
 
+<p>
+  <img src="https://raw.githubusercontent.com/amansharma312/flankr-shimmer/main/screenshots/light-loading.png" width="200" alt="Loading skeleton">
+  <img src="https://raw.githubusercontent.com/amansharma312/flankr-shimmer/main/screenshots/reveal.gif" width="200" alt="Reveal, slowed down">
+  <img src="https://raw.githubusercontent.com/amansharma312/flankr-shimmer/main/screenshots/light-loaded.png" width="200" alt="Loaded">
+  <img src="https://raw.githubusercontent.com/amansharma312/flankr-shimmer/main/screenshots/dark-loading.png" width="200" alt="Dark mode skeleton">
+</p>
+
 You don't hand-build a second "shimmer layout" that drifts out of sync with
 the real one: the skeleton is measured from your real widgets.
 
