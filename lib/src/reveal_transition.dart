@@ -17,12 +17,18 @@ class FlankrRevealTransition extends StatefulWidget {
     required this.wipe,
     required this.content,
     required this.bones,
+    this.extent,
   });
 
   final Animation<double> animation;
   final FlankrWipe wipe;
   final Widget content;
   final Widget bones;
+
+  /// How far down the skeleton actually has bones, in logical px. The front
+  /// crosses this, not empty space below it, so the visible part of the
+  /// reveal takes its whole duration. The full height when null.
+  final double? extent;
 
   @override
   State<FlankrRevealTransition> createState() => _FlankrRevealTransitionState();
@@ -31,6 +37,27 @@ class FlankrRevealTransition extends StatefulWidget {
 class _FlankrRevealTransitionState extends State<FlankrRevealTransition> {
   /// The taller of content and skeleton, so both fronts cross the same distance.
   Size _extent = Size.zero;
+
+  /// Wipes ease gently in and out (sine, not cubic, so the front never
+  /// rushes through the middle); a crossfade keeps the linear fade.
+  late CurvedAnimation _eased = _curve();
+
+  CurvedAnimation _curve() => CurvedAnimation(parent: widget.animation, curve: Curves.easeInOutSine);
+
+  @override
+  void didUpdateWidget(FlankrRevealTransition oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.animation != widget.animation) {
+      _eased.dispose();
+      _eased = _curve();
+    }
+  }
+
+  @override
+  void dispose() {
+    _eased.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +78,7 @@ class _FlankrRevealTransitionState extends State<FlankrRevealTransition> {
     }
     // Only the masks change per frame; both children keep their own layers.
     return AnimatedBuilder(
-      animation: animation,
+      animation: _eased,
       builder: (context, _) => stack(
         ShaderMask(
           blendMode: BlendMode.dstIn,
@@ -71,12 +98,18 @@ class _FlankrRevealTransitionState extends State<FlankrRevealTransition> {
   ui.Shader _front(Rect bounds, {required bool grow}) {
     if (grow) _extent = bounds.size;
     final width = math.max(_extent.width, bounds.width);
-    final height = math.max(_extent.height, bounds.height);
+    final full = math.max(_extent.height, bounds.height);
+    final height = math.min(widget.extent ?? full, full);
+    final soft = math.max(kWipeSoftness, height * kWipeSoftnessFraction);
     final direction = widget.wipe == FlankrWipe.down ? const Offset(0, 1) : Offset(kSlantCos, kSlantSin);
-    final distance = width * direction.dx + height * direction.dy + kWipeSoftness;
-    final at = widget.animation.value * distance;
+    final distance = width * direction.dx + height * direction.dy + soft;
+    // At 1 everything is shown, including anything below the drawn extent.
+    final at = _eased.value >= 1 ? double.infinity : _eased.value * distance;
+    if (at.isInfinite) {
+      return ui.Gradient.linear(Offset.zero, const Offset(0, 1), const [Color(0xFFFFFFFF), Color(0xFFFFFFFF)]);
+    }
     return ui.Gradient.linear(
-      direction * (at - kWipeSoftness),
+      direction * (at - soft),
       direction * at,
       const [Color(0xFFFFFFFF), Color(0x00FFFFFF)],
     );

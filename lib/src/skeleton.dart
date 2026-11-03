@@ -235,13 +235,23 @@ class _SkeletonState<T extends Object> extends State<Skeleton<T>> with SingleTic
 
   FlankrReveal _resolveReveal() {
     final spec = widget.reveal ?? FlankrConfig.of(context).reveal;
+    final screenHeight = MediaQuery.maybeSizeOf(context)?.height ?? 800;
+    final drawn = _drawnExtent() ?? _skeletonHeight ?? 0;
     return spec.resolve(FlankrRevealContext(
       waited: _waited.elapsed,
       input: FlankrInputTracker.instance.recent,
       refetch: _refetch,
-      height: _skeletonHeight ?? 0,
-      screenHeight: MediaQuery.maybeSizeOf(context)?.height ?? 800,
+      height: drawn.clamp(0, screenHeight).toDouble(),
+      screenHeight: screenHeight,
+      pieces: _lastMeasurement?.shape.bones.length ?? 0,
     ));
+  }
+
+  /// How far down the skeleton actually draws: the bottom of its lowest bone.
+  double? _drawnExtent() {
+    final bones = _lastMeasurement?.shape.bones;
+    if (bones == null || bones.isEmpty) return null;
+    return bones.fold<double>(0, (bottom, bone) => bone.rect.bottom > bottom ? bone.rect.bottom : bottom);
   }
 
   /// After a frame: report the reveal, remember data and shape, check for movement.
@@ -289,6 +299,7 @@ class _SkeletonState<T extends Object> extends State<Skeleton<T>> with SingleTic
       _Phase.revealing => FlankrRevealTransition(
           animation: _controller,
           wipe: _active!.wipe,
+          extent: _drawnExtent(),
           content: _content(),
           bones: _revealBones(),
         ),

@@ -23,6 +23,7 @@ class FlankrRevealContext {
     required this.refetch,
     required this.height,
     required this.screenHeight,
+    this.pieces = 0,
   });
 
   /// How long the skeleton was up (including the hold).
@@ -34,10 +35,14 @@ class FlankrRevealContext {
   /// The skeleton was drawn from the data already on screen.
   final bool refetch;
 
-  /// The skeleton's height, in logical px.
+  /// How tall the skeleton's drawn part is, in logical px (where its bones
+  /// are, not empty space below them), capped at the screen's height.
   final double height;
 
   final double screenHeight;
+
+  /// How many bones (bars and blocks) the skeleton has.
+  final int pieces;
 }
 
 /// How content replaces its skeleton.
@@ -88,26 +93,28 @@ class FlankrReveal {
 
   static FlankrReveal _sequence(FlankrRevealContext c) => FlankrReveal(
         wipe: FlankrWipe.down,
-        duration: _wipeDuration(c.height, pxPerMs: 1.2),
+        duration: _wipeDuration(c.height),
       );
 
   static FlankrReveal _sweep(FlankrRevealContext c) {
     if (c.height > c.screenHeight * kSweepMaxScreens) return together;
     return FlankrReveal(
       wipe: FlankrWipe.diagonal,
-      duration: _wipeDuration(c.height, pxPerMs: 0.9),
+      duration: _wipeDuration(c.height),
     );
   }
 
   static FlankrReveal _smart(FlankrRevealContext c) {
     if (c.input || c.waited < kSkeletonDelay) return instant;
     if (c.refetch) return const FlankrReveal(duration: kRefetchFade);
-    if (c.height < kSmallReveal) return together;
+    if (c.height < kSmallReveal || (c.pieces > 0 && c.pieces <= kSmallRevealPieces)) return together;
     return _sequence(c);
   }
 
-  static Duration _wipeDuration(double height, {required double pxPerMs}) {
-    final ms = ((height + kWipeSoftness) / pxPerMs).clamp(240.0, 900.0);
-    return Duration(milliseconds: ms.round());
+  /// About 1.1s for a screen of cards; longer for more, never rushed.
+  static Duration _wipeDuration(double height) {
+    final ms = kSequenceBase.inMilliseconds + height * kSequenceMsPerPx;
+    final clamped = ms.clamp(kWipeMin.inMilliseconds.toDouble(), kWipeMax.inMilliseconds.toDouble());
+    return Duration(milliseconds: clamped.round());
   }
 }

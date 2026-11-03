@@ -16,7 +16,10 @@ const Duration kRefetchFade = Duration(milliseconds: 120);
 const Duration kInputWindow = Duration(milliseconds: 400);
 
 /// Content shorter than this (logical px) is revealed whole, not in sequence.
-const double kSmallReveal = 320;
+const double kSmallReveal = 72;
+
+/// Content of this many pieces or fewer is revealed whole, not in sequence.
+const int kSmallRevealPieces = 3;
 
 /// A sweep taller than this many screens gives way to a crossfade.
 const double kSweepMaxScreens = 1.5;
@@ -53,8 +56,17 @@ const double kShimmerSlantDegrees = 20;
 /// The lowest opacity a pulse fades to.
 const double kPulseMinOpacity = 0.45;
 
-/// The softness of a reveal's wipe front, in logical px.
-const double kWipeSoftness = 48;
+/// The softest a reveal's wipe front gets, in logical px; it widens to
+/// [kWipeSoftnessFraction] of the revealed height, so each row fades in
+/// rather than snapping.
+const double kWipeSoftness = 96;
+const double kWipeSoftnessFraction = 0.4;
+
+/// A sequence reveal: a base, plus time per logical px of revealed height.
+const Duration kSequenceBase = Duration(milliseconds: 600);
+const double kSequenceMsPerPx = 1.1;
+const Duration kWipeMin = Duration(milliseconds: 700);
+const Duration kWipeMax = Duration(milliseconds: 1500);
 
 /// Default radius of a bar of text or a plain block.
 const double kDefaultRadius = 4;
