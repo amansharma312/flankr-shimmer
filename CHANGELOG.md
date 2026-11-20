@@ -1,3 +1,8 @@
+## 0.1.2
+
+- `SkeletonFuture` no longer throws when its value is itself a `Future`.
+- Internal: sources reorganised into `model/`, `controller/`, `services/`, `widgets/`, `utility/` and `resources/`, with shared easing and loop-timing helpers. The public API is unchanged.
+
 ## 0.1.1
 
 - No longer imports `package:flutter/material.dart`; the package now depends only on `widgets`, so it works the same in Material, Cupertino and custom-design apps.
