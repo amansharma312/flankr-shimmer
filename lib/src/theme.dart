@@ -26,7 +26,8 @@ enum TextTop { ascender, capHeight, xHeight }
 /// The font line each bar of text is drawn down to.
 enum TextBottom { baseline, descender }
 
-/// `system` follows the ambient [Theme]'s brightness; the others pin one set of colours.
+/// `system` follows the device's light/dark setting; the others pin one set of colours.
+/// If your app forces a theme mode regardless of the device, pass `light` or `dark`.
 enum FlankrMode { light, dark, system }
 
 /// The fill of a skeleton and the highlight that sweeps across it.

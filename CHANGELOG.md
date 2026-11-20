@@ -1,3 +1,8 @@
+## 0.1.1
+
+- No longer imports `package:flutter/material.dart`; the package now depends only on `widgets`, so it works the same in Material, Cupertino and custom-design apps.
+- `FlankrMode.system` now follows the device light/dark setting (`MediaQuery.platformBrightnessOf`) instead of `Theme.of(context).brightness`. If your app forces a theme mode regardless of the device, set `FlankrMode.light` or `FlankrMode.dark` on `FlankrProvider`.
+
 ## 0.1.0
 
 - First release: `Skeleton`, `Skeleton.child`, `SkeletonFuture`, `SkeletonBox`.

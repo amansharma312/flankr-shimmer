@@ -79,7 +79,7 @@ and an inner one overrides only what it sets.
 
 ```dart
 FlankrProvider(
-  mode: FlankrMode.system,           // or light / dark; system follows Theme.of(context)
+  mode: FlankrMode.system,           // or light / dark; system follows the device setting
   theme: const FlankrTheme(radius: 6),
   reveal: FlankrReveal.smart,        // or together / sequence / sweep / instant
   debug: kDebugMode,                 // outlines each skeleton with its source

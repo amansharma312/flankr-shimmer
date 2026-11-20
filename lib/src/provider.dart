@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 import 'reveal_spec.dart';
 import 'theme.dart';
@@ -67,7 +67,7 @@ class FlankrConfig {
     final brightness = switch (config.mode) {
       FlankrMode.light => Brightness.light,
       FlankrMode.dark => Brightness.dark,
-      FlankrMode.system => Theme.of(context).brightness,
+      FlankrMode.system => MediaQuery.platformBrightnessOf(context),
     };
     final disable = MediaQuery.maybeDisableAnimationsOf(context) ?? false;
     return config.theme.resolve(brightness, disableAnimations: disable);
